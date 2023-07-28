@@ -16,7 +16,7 @@
       "prettier --write",
       "eslint --fix"
     ]
-  },  
+  },
   "dependencies": {
     "@chakra-ui/next-js": "^2.1.5",
     "@chakra-ui/react": "^2.8.0",
@@ -40,7 +40,7 @@
     "eslint-config-next": "13.4.12",
     "eslint-config-prettier": "^8.9.0",
     "husky": "^6.0.0",
-    "lint-staged": "^11.0.0",
+    "lint-staged": "^11.2.6",
     "prettier": "^3.0.0",
     "typescript": "5.1.6"
   }
