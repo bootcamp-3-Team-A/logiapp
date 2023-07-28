@@ -6,7 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier **/*.{ts,tsx} --write",
+    "fix": "npm run format && npm run lint",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "npx prettier --write",
+      "npx eslint --fix"
+    ]
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.1.5",
@@ -29,6 +38,10 @@
     "@types/react-dom": "18.2.7",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.12",
+    "eslint-config-prettier": "^8.9.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.2.6",
+    "prettier": "^3.0.0",
     "typescript": "5.1.6"
   }
 }
