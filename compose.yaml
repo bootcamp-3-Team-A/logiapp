@@ -1,0 +1,35 @@
+version: "3"
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    command: sh -c "npm run dev"
+    ports:
+      - "3000:3000"
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - ./server:/usr/src/app
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+
+  db:
+    image: mysql:5.7
+    restart: always
+    platform: linux/x86_64
+    ports:
+      - "3306:3306"
+    env_file: .env
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
