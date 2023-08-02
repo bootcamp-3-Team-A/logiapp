@@ -1,17 +1,3 @@
-
-<!-- install Chakra UI -->
-npm i @chakra-ui/react @chakra-ui/next-js @emotion/react @emotion/styled framer-motion
-
-<!-- マンダラチャートコンポーネントにてReactのライブラリであるrechartsを使用 -->
-
-npm install @chakra-ui/react recharts
-
-
-
-
-
-
-
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
