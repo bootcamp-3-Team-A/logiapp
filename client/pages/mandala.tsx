@@ -56,7 +56,7 @@ const MandalChart: React.FC<MandalChartProps> = ({ initialResponses }) => {
                                     minHeight="unset"
                                 />
                             ) : (
-                                // 各マスに表示
+                                // 各マスに表示する
                                 responses[index]
                             )}
                         </Box>
