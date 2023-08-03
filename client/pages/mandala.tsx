@@ -57,6 +57,18 @@ const MandalChart = () => {
         <Heading as="h1" size="xl" mb="4">
           Mandala Chart
         </Heading>
+        <Input
+          placeholder="Mandala Chartのタイトルを入力"
+          onChange={(e) => setTopic(e.target.value)}
+          borderColor="teal.500"
+          textAlign="center"
+          fontSize="xl"
+          p="4"
+          borderRadius="md"
+          width="30%"
+          mt="2"
+          mb="6"
+        />
         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gridGap="4px">
           {Array.from({ length: 9 }).map((_, index) => (
             <Box
