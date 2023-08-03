@@ -13,9 +13,12 @@ const MandalChart = () => {
   const [responses, setResponses] = useState<string[]>(
     Array.from({ length: 9 }, () => 'Data'),
   );
+  const [isLoading, setIsLoading] = useState(false); // 新しいisLoadingステート
 
   const handleStartButton = async () => {
     try {
+      setIsLoading(true); // fetch開始時にisLoadingをtrueに設定
+
       const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: {
@@ -38,6 +41,8 @@ const MandalChart = () => {
       }
     } catch (error) {
       console.error('Error occurred while fetching data:', error);
+    } finally {
+      setIsLoading(false); // fetch完了時にisLoadingをfalseに設定
     }
   };
 
@@ -52,11 +57,16 @@ const MandalChart = () => {
         <Heading as="h1" size="xl" mb="4">
           Mandala Chart
         </Heading>
+        {isLoading && (
+          <Heading as="h1" size="xl" mt="4">
+            Loading...
+          </Heading>
+        )}
         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gridGap="4px">
           {Array.from({ length: 9 }).map((_, index) => (
             <Box
               key={index}
-              backgroundColor={index === 4 ? 'green.300' : 'gray.200'}
+              backgroundColor={index === 4 ? 'red.200' : 'gray.200'}
               borderWidth="1px"
               borderColor="transparent"
               p="4"
