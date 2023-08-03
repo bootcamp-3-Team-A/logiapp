@@ -8,28 +8,36 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-interface MandalChartProps {
-  initialResponses: string[];
-}
-
-const MandalChart: React.FC<MandalChartProps> = ({ initialResponses }) => {
+const MandalChart = () => {
   const [topic, setTopic] = useState('');
-  const [responses, setResponses] = useState(initialResponses);
+  const [responses, setResponses] = useState<string[]>(
+    Array.from({ length: 9 }, () => 'Data'),
+  );
 
   const handleStartButton = async () => {
-    // サーバーへPOSTリクエストを送信
-    const response = await fetch('/api/postData', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ topic }),
-    });
+    try {
+      const response = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ product: topic }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      // サーバーサイドからのレスポンスを更新
-      setResponses(data.responses);
+      if (response.ok) {
+        const data = await response.json();
+        const responseData = JSON.parse(data.response) as Record<
+          string,
+          string
+        >; // Parse the JSON response and specify the type
+        const dataValues = Object.values(responseData);
+        setResponses(dataValues);
+      } else {
+        const errorData = await response.json();
+        console.error('Error occurred:', errorData.message);
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching data:', error);
     }
   };
 
@@ -68,7 +76,6 @@ const MandalChart: React.FC<MandalChartProps> = ({ initialResponses }) => {
                   minHeight="unset"
                 />
               ) : (
-                // 各マスに表示する
                 responses[index]
               )}
             </Box>
@@ -81,11 +88,5 @@ const MandalChart: React.FC<MandalChartProps> = ({ initialResponses }) => {
     </ChakraProvider>
   );
 };
-
-export async function getServerSideProps() {
-  // サーバー側で必要なデータを取得する
-  const initialResponses = Array.from({ length: 9 }, () => 'Data');
-  return { props: { initialResponses } };
-}
 
 export default MandalChart;
