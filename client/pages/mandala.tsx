@@ -57,11 +57,6 @@ const MandalChart = () => {
         <Heading as="h1" size="xl" mb="4">
           Mandala Chart
         </Heading>
-        {isLoading && (
-          <Heading as="h1" size="xl" mt="4">
-            Loading...
-          </Heading>
-        )}
         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gridGap="4px">
           {Array.from({ length: 9 }).map((_, index) => (
             <Box
@@ -94,6 +89,22 @@ const MandalChart = () => {
         <Button mt="4" colorScheme="teal" onClick={handleStartButton}>
           Start
         </Button>
+        {isLoading && (
+          <Box
+            position="fixed"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+            bg="rgba(255, 255, 255, 0.7)"
+            p="4"
+            zIndex="9999"
+            borderRadius="md"
+          >
+            <Heading as="h1" size="xl">
+              Loading...
+            </Heading>
+          </Box>
+        )}
       </Flex>
     </ChakraProvider>
   );
