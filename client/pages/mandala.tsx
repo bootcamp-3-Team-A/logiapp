@@ -56,7 +56,7 @@ const MandalChart = () => {
           {Array.from({ length: 9 }).map((_, index) => (
             <Box
               key={index}
-              backgroundColor="gray.200"
+              backgroundColor={index === 4 ? 'green.300' : 'gray.200'}
               borderWidth="1px"
               borderColor="transparent"
               p="4"
