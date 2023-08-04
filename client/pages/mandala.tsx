@@ -8,16 +8,18 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-const MandalChart = () => {
+const MandalaChart = () => {
   const [topic, setTopic] = useState('');
   const [responses, setResponses] = useState<string[]>(
     Array.from({ length: 9 }, () => 'Data'),
   );
-  const [isLoading, setIsLoading] = useState(false); // 新しいisLoadingステート
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isSaving, setIsSaving] = useState(false); // 新しいステート
 
   const handleStartButton = async () => {
     try {
-      setIsLoading(true); // fetch開始時にisLoadingをtrueに設定
+      setIsLoading(true);
 
       const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
@@ -32,7 +34,7 @@ const MandalChart = () => {
         const responseData = JSON.parse(data.response) as Record<
           string,
           string
-        >; // Parse the JSON response and specify the type
+        >;
         const dataValues = Object.values(responseData);
         setResponses(dataValues);
       } else {
@@ -42,16 +44,28 @@ const MandalChart = () => {
     } catch (error) {
       console.error('Error occurred while fetching data:', error);
     } finally {
-      setIsLoading(false); // fetch完了時にisLoadingをfalseに設定
+      setIsLoading(false);
+      setIsEditMode(true);
+      setIsSaving(true); // データのフェッチが終わったら保存可能として「保存」ボタンを表示
     }
+  };
+
+  const handleSaveButton = () => {
+    // 保存処理をここに実装する
+    console.log('Saving data:', responses);
+    setIsSaving(false); // 保存が完了したら「保存」ボタンを非表示にする
+  };
+
+  const toggleEditMode = () => {
+    setIsEditMode((prevMode) => !prevMode);
+    setIsSaving(false); // 「編集」ボタンをクリックしたら「保存」ボタンを非表示にする
   };
 
   return (
     <ChakraProvider>
-      <Flex
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
+      <Box
+        display="grid"
+        placeItems="center" // ここで全体を中央に配置します
         height="100vh"
       >
         <Heading as="h1" size="xl" mb="4">
@@ -59,7 +73,6 @@ const MandalChart = () => {
         </Heading>
         <Input
           placeholder="Mandala Chartのタイトルを入力"
-          onChange={(e) => setTopic(e.target.value)}
           borderColor="teal.500"
           textAlign="center"
           fontSize="xl"
@@ -98,9 +111,35 @@ const MandalChart = () => {
             </Box>
           ))}
         </Box>
-        <Button mt="4" colorScheme="teal" onClick={handleStartButton}>
-          Start
-        </Button>
+        <Flex mt="4" w="10%">
+          <Button flex="1" colorScheme="teal" onClick={handleStartButton}>
+            Start
+          </Button>
+          {!isLoading && isEditMode && (
+            <>
+              <Button
+                flex="1"
+                colorScheme="teal"
+                w="10%"
+                onClick={toggleEditMode}
+                ml="2"
+              >
+                Edit
+              </Button>
+              {isSaving && (
+                <Button
+                  flex="1"
+                  colorScheme="teal"
+                  w="10%"
+                  onClick={handleSaveButton}
+                  ml="2"
+                >
+                  Save
+                </Button>
+              )}
+            </>
+          )}
+        </Flex>
         {isLoading && (
           <Box
             position="fixed"
@@ -117,9 +156,9 @@ const MandalChart = () => {
             </Heading>
           </Box>
         )}
-      </Flex>
+      </Box>
     </ChakraProvider>
   );
 };
 
-export default MandalChart;
+export default MandalaChart;
