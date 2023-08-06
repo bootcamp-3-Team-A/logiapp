@@ -11,13 +11,18 @@ import { useState } from 'react';
 const MandalaChart = () => {
   const [topic, setTopic] = useState('');
   const [responses, setResponses] = useState<string[]>(
-    Array.from({ length: 9 }, () => 'Data'),
+    Array.from({ length: 81 }, () => 'Data'),
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isSaving, setIsSaving] = useState(false); // 新しいステート
+  const [editedResponses, setEditedResponses] = useState<string[]>(responses);
 
   const handleStartButton = async () => {
+    if (topic.trim() === '') {
+      // If the topic input is empty or contains only whitespaces, prevent starting
+      return;
+    }
+
     try {
       setIsLoading(true);
 
@@ -36,7 +41,22 @@ const MandalaChart = () => {
           string
         >;
         const dataValues = Object.values(responseData);
-        setResponses(dataValues);
+
+        // Store the received data in the specified grid cells (30, 31, 32, 39, 41, 48, 49, 50)
+        setResponses((prevResponses) => {
+          const newResponses = [...prevResponses];
+          newResponses[30] = dataValues[0];
+          newResponses[31] = dataValues[1];
+          newResponses[32] = dataValues[2];
+          newResponses[39] = dataValues[3];
+          newResponses[41] = dataValues[4];
+          newResponses[48] = dataValues[5];
+          newResponses[49] = dataValues[6];
+          newResponses[50] = dataValues[7];
+          return newResponses;
+        });
+
+        setEditedResponses(dataValues);
       } else {
         const errorData = await response.json();
         console.error('Error occurred:', errorData.message);
@@ -45,29 +65,50 @@ const MandalaChart = () => {
       console.error('Error occurred while fetching data:', error);
     } finally {
       setIsLoading(false);
-      setIsEditMode(true);
-      setIsSaving(true); // データのフェッチが終わったら保存可能として「保存」ボタンを表示
+      setIsEditMode(false); // Reset edit mode to false when loading is complete
     }
   };
 
   const handleSaveButton = () => {
-    // 保存処理をここに実装する
-    console.log('Saving data:', responses);
-    setIsSaving(false); // 保存が完了したら「保存」ボタンを非表示にする
+    setResponses([...editedResponses]);
+    setIsEditMode(false);
+    createNewGridAroundCenter();
+  };
+
+  const createNewGridAroundCenter = () => {
+    const newResponses = Array.from({ length: 81 }, () => ''); // 81 cells for 9 9x9 grids (81 total)
+    const centerIndex = 40; // Central cell index of the 9x9 grid
+    const surroundingIndices = [
+      // Indices for the surrounding 8 9x9 grids
+      0, 1, 2, 9, 10, 11, 18, 19, 20, 72, 73, 74, 81, 82, 83, 90, 91, 92, 144,
+      145, 146, 153, 154, 155, 162, 163, 164, 576, 577, 578, 585, 586, 587, 594,
+      595, 596, 648, 649, 650, 657, 658, 659, 666, 667, 668, 720, 721, 722, 729,
+      730, 731, 738, 739, 740, 792, 793, 794, 801, 802, 803, 810, 811, 812, 864,
+      865, 866, 873, 874, 875, 882, 883, 884,
+    ];
+
+    for (let i = 0; i < surroundingIndices.length; i++) {
+      newResponses[surroundingIndices[i]] =
+        editedResponses[centerIndex - 41 + i]; // 41 is the offset to get the surrounding grid data from the central grid data
+    }
+
+    setResponses(newResponses);
+    setEditedResponses(newResponses);
   };
 
   const toggleEditMode = () => {
     setIsEditMode((prevMode) => !prevMode);
-    setIsSaving(false); // 「編集」ボタンをクリックしたら「保存」ボタンを非表示にする
+  };
+
+  const handleCellEdit = (index: number, value: string) => {
+    const newEditedResponses = [...editedResponses];
+    newEditedResponses[index] = value;
+    setEditedResponses(newEditedResponses);
   };
 
   return (
     <ChakraProvider>
-      <Box
-        display="grid"
-        placeItems="center" // ここで全体を中央に配置します
-        height="100vh"
-      >
+      <Box display="grid" placeItems="center" height="100vh">
         <Heading as="h1" size="xl" mb="4">
           Mandala Chart
         </Heading>
@@ -81,12 +122,19 @@ const MandalaChart = () => {
           width="30%"
           mt="2"
           mb="6"
+          readOnly={!isEditMode} // Disable editing of the chart title when not in edit mode
         />
-        <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gridGap="4px">
-          {Array.from({ length: 9 }).map((_, index) => (
+        <Box display="grid" gridTemplateColumns="repeat(9, 1fr)" gridGap="4px">
+          {Array.from({ length: 81 }).map((_, index) => (
             <Box
               key={index}
-              backgroundColor={index === 4 ? 'red.200' : 'gray.200'}
+              backgroundColor={
+                index === 40
+                  ? 'red.200'
+                  : [10, 13, 16, 37, 43, 64, 67, 70].includes(index)
+                  ? 'red.200'
+                  : 'gray.200'
+              }
               borderWidth="1px"
               borderColor="transparent"
               p="4"
@@ -96,7 +144,7 @@ const MandalaChart = () => {
               alignItems="center"
               justifyContent="center"
             >
-              {index === 4 ? (
+              {index === 40 ? (
                 <Input
                   placeholder="トピックを入力"
                   value={topic}
@@ -104,41 +152,51 @@ const MandalaChart = () => {
                   borderColor="transparent"
                   textAlign="center"
                   minHeight="unset"
+                  readOnly={!isEditMode} // Disable editing of the topic when not in edit mode
                 />
               ) : (
-                responses[index]
+                <Input
+                  value={isEditMode ? editedResponses[index] : responses[index]}
+                  onChange={(e) => handleCellEdit(index, e.target.value)}
+                  onKeyDown={(e) => {
+                    if (isEditMode && e.keyCode === 8) {
+                      // Handle delete key (Backspace) to clear the input
+                      handleCellEdit(index, '');
+                    }
+                  }}
+                  textAlign="center"
+                  minHeight="unset"
+                  readOnly={!isEditMode} // Disable editing of the responses when not in edit mode
+                />
               )}
             </Box>
           ))}
         </Box>
-        <Flex mt="4" w="10%">
-          <Button flex="1" colorScheme="teal" onClick={handleStartButton}>
+        <Flex mt="4" w="20%">
+          {!isLoading && !isEditMode && (
+            <Button flex="1" colorScheme="teal" onClick={toggleEditMode}>
+              Edit
+            </Button>
+          )}
+          {isEditMode && (
+            <Button
+              flex="1"
+              colorScheme="teal"
+              onClick={handleSaveButton}
+              ml="2"
+            >
+              Let's Mandala
+            </Button>
+          )}
+          <Button
+            flex="1"
+            colorScheme="teal"
+            onClick={handleStartButton}
+            ml="2"
+            disabled={isLoading}
+          >
             Start
           </Button>
-          {!isLoading && isEditMode && (
-            <>
-              <Button
-                flex="1"
-                colorScheme="teal"
-                w="10%"
-                onClick={toggleEditMode}
-                ml="2"
-              >
-                Edit
-              </Button>
-              {isSaving && (
-                <Button
-                  flex="1"
-                  colorScheme="teal"
-                  w="10%"
-                  onClick={handleSaveButton}
-                  ml="2"
-                >
-                  Save
-                </Button>
-              )}
-            </>
-          )}
         </Flex>
         {isLoading && (
           <Box
