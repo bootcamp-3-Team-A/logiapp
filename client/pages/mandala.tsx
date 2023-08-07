@@ -19,7 +19,6 @@ const MandalaChart = () => {
 
   const handleStartButton = async () => {
     if (topic.trim() === '') {
-      // If the topic input is empty or contains only whitespaces, prevent starting
       return;
     }
 
@@ -42,7 +41,6 @@ const MandalaChart = () => {
         >;
         const dataValues = Object.values(responseData);
 
-        // Store the received data in the specified grid cells (30, 31, 32, 39, 41, 48, 49, 50)
         setResponses((prevResponses) => {
           const newResponses = [...prevResponses];
           newResponses[30] = dataValues[0];
@@ -65,32 +63,158 @@ const MandalaChart = () => {
       console.error('Error occurred while fetching data:', error);
     } finally {
       setIsLoading(false);
-      setIsEditMode(false); // Reset edit mode to false when loading is complete
+      setIsEditMode(false);
     }
   };
 
   const handleSaveButton = () => {
-    setResponses([...editedResponses]);
+    const newResponses = [...responses];
+
+    editedResponses.forEach((value, index) => {
+      if (value !== responses[index]) {
+        // Update the response if it has been edited
+        newResponses[index] = value;
+      }
+    });
+
+    setResponses(newResponses);
     setIsEditMode(false);
     createNewGridAroundCenter();
+    postAndReceiveResponses();
+  };
+
+  const postAndReceiveResponses = async () => {
+    try {
+      setIsLoading(true);
+
+      for (const gridIndex of [30, 31, 32, 39, 41, 48, 49, 50]) {
+        const word = responses[gridIndex];
+        const response = await fetch('http://localhost:8000/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ product: word }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const responseData = JSON.parse(data.response) as Record<
+            string,
+            string
+          >;
+          const dataValues = Object.values(responseData);
+          setResponses((prevResponses) => {
+            const newResponses = [...prevResponses];
+            switch (gridIndex) {
+              case 30:
+                newResponses[0] = dataValues[0];
+                newResponses[1] = dataValues[1];
+                newResponses[2] = dataValues[2];
+                newResponses[9] = dataValues[3];
+                newResponses[11] = dataValues[4];
+                newResponses[18] = dataValues[5];
+                newResponses[19] = dataValues[6];
+                newResponses[20] = dataValues[7];
+                break;
+              case 31:
+                newResponses[3] = dataValues[0];
+                newResponses[4] = dataValues[1];
+                newResponses[5] = dataValues[2];
+                newResponses[12] = dataValues[3];
+                newResponses[14] = dataValues[4];
+                newResponses[21] = dataValues[5];
+                newResponses[22] = dataValues[6];
+                newResponses[23] = dataValues[7];
+                break;
+              case 32:
+                newResponses[6] = dataValues[0];
+                newResponses[7] = dataValues[1];
+                newResponses[8] = dataValues[2];
+                newResponses[15] = dataValues[3];
+                newResponses[17] = dataValues[4];
+                newResponses[24] = dataValues[5];
+                newResponses[25] = dataValues[6];
+                newResponses[26] = dataValues[7];
+                break;
+              case 39:
+                newResponses[27] = dataValues[0];
+                newResponses[28] = dataValues[1];
+                newResponses[29] = dataValues[2];
+                newResponses[36] = dataValues[3];
+                newResponses[38] = dataValues[4];
+                newResponses[45] = dataValues[5];
+                newResponses[46] = dataValues[6];
+                newResponses[47] = dataValues[7];
+                break;
+              case 41:
+                newResponses[33] = dataValues[0];
+                newResponses[34] = dataValues[1];
+                newResponses[35] = dataValues[2];
+                newResponses[42] = dataValues[3];
+                newResponses[44] = dataValues[4];
+                newResponses[51] = dataValues[5];
+                newResponses[52] = dataValues[6];
+                newResponses[53] = dataValues[7];
+                break;
+              case 48:
+                newResponses[54] = dataValues[0];
+                newResponses[55] = dataValues[1];
+                newResponses[56] = dataValues[2];
+                newResponses[63] = dataValues[3];
+                newResponses[65] = dataValues[4];
+                newResponses[72] = dataValues[5];
+                newResponses[73] = dataValues[6];
+                newResponses[74] = dataValues[7];
+                break;
+              case 49:
+                newResponses[57] = dataValues[0];
+                newResponses[58] = dataValues[1];
+                newResponses[59] = dataValues[2];
+                newResponses[66] = dataValues[3];
+                newResponses[68] = dataValues[4];
+                newResponses[75] = dataValues[5];
+                newResponses[76] = dataValues[6];
+                newResponses[78] = dataValues[7];
+                break;
+              case 50:
+                newResponses[60] = dataValues[0];
+                newResponses[61] = dataValues[1];
+                newResponses[62] = dataValues[2];
+                newResponses[69] = dataValues[3];
+                newResponses[71] = dataValues[4];
+                newResponses[78] = dataValues[5];
+                newResponses[79] = dataValues[6];
+                newResponses[80] = dataValues[7];
+                break;
+              default:
+                break;
+            }
+            return newResponses;
+          });
+        } else {
+          const errorData = await response.json();
+          console.error('Error occurred:', errorData.message);
+        }
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const createNewGridAroundCenter = () => {
-    const newResponses = Array.from({ length: 81 }, () => ''); // 81 cells for 9 9x9 grids (81 total)
-    const centerIndex = 40; // Central cell index of the 9x9 grid
-    const surroundingIndices = [
-      // Indices for the surrounding 8 9x9 grids
-      0, 1, 2, 9, 10, 11, 18, 19, 20, 72, 73, 74, 81, 82, 83, 90, 91, 92, 144,
-      145, 146, 153, 154, 155, 162, 163, 164, 576, 577, 578, 585, 586, 587, 594,
-      595, 596, 648, 649, 650, 657, 658, 659, 666, 667, 668, 720, 721, 722, 729,
-      730, 731, 738, 739, 740, 792, 793, 794, 801, 802, 803, 810, 811, 812, 864,
-      865, 866, 873, 874, 875, 882, 883, 884,
-    ];
+    const newResponses = [...responses];
 
-    for (let i = 0; i < surroundingIndices.length; i++) {
-      newResponses[surroundingIndices[i]] =
-        editedResponses[centerIndex - 41 + i]; // 41 is the offset to get the surrounding grid data from the central grid data
-    }
+    newResponses[10] = responses[30];
+    newResponses[13] = responses[31];
+    newResponses[16] = responses[32];
+    newResponses[37] = responses[39];
+    newResponses[43] = responses[41];
+    newResponses[64] = responses[48];
+    newResponses[67] = responses[49];
+    newResponses[70] = responses[50];
 
     setResponses(newResponses);
     setEditedResponses(newResponses);
@@ -131,8 +255,11 @@ const MandalaChart = () => {
               backgroundColor={
                 index === 40
                   ? 'red.200'
-                  : [10, 13, 16, 37, 43, 64, 67, 70].includes(index)
-                  ? 'red.200'
+                  : [
+                      10, 13, 16, 30, 31, 32, 37, 39, 41, 43, 48, 49, 50, 64,
+                      67, 70,
+                    ].includes(index)
+                  ? 'red.50'
                   : 'gray.200'
               }
               borderWidth="1px"
