@@ -6,5 +6,5 @@ from sql.settings.setting import DATABASE_URL
 ENGINE = create_engine(DATABASE_URL, echo=True)
 
 # セッションの作成
-Session = sessionmaker(bind=ENGINE)
-session = scoped_session(Session)
+SessionLocal = sessionmaker(bind=ENGINE)
+session = scoped_session(SessionLocal)
