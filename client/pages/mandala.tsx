@@ -6,9 +6,13 @@ import {
   Heading,
   Input,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const MandalaChart = () => {
+  const [gridIndices, setGridIndices] = useState<number[]>([
+    10, 13, 16, 37, 43, 64, 67, 70,
+  ]);
+  const [title, setTitle] = useState('');
   const [topic, setTopic] = useState('');
   const [responses, setResponses] = useState<string[]>(
     Array.from({ length: 81 }, () => 'Data'),
@@ -16,6 +20,12 @@ const MandalaChart = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedResponses, setEditedResponses] = useState<string[]>(responses);
+  const [showSaveButton, setShowSaveButton] = useState(false);
+  useEffect(() => {
+    if (isEditMode) {
+      setEditedResponses([...responses]);
+    }
+  }, [isEditMode, responses]);
 
   const handleStartButton = async () => {
     if (topic.trim() === '') {
@@ -40,6 +50,7 @@ const MandalaChart = () => {
           string
         >;
         const dataValues = Object.values(responseData);
+        setEditedResponses([...responses]);
 
         setResponses((prevResponses) => {
           const newResponses = [...prevResponses];
@@ -67,17 +78,8 @@ const MandalaChart = () => {
     }
   };
 
-  const handleSaveButton = () => {
-    const newResponses = [...responses];
-
-    editedResponses.forEach((value, index) => {
-      if (value !== responses[index]) {
-        // Update the response if it has been edited
-        newResponses[index] = value;
-      }
-    });
-
-    setResponses(newResponses);
+  const handleMandalaButton = () => {
+    setResponses([...editedResponses]);
     setIsEditMode(false);
     createNewGridAroundCenter();
     postAndReceiveResponses();
@@ -88,7 +90,7 @@ const MandalaChart = () => {
       setIsLoading(true);
 
       for (const gridIndex of [30, 31, 32, 39, 41, 48, 49, 50]) {
-        const word = responses[gridIndex];
+        const word = editedResponses[gridIndex];
         const response = await fetch('http://localhost:8000/chat', {
           method: 'POST',
           headers: {
@@ -175,7 +177,7 @@ const MandalaChart = () => {
                 newResponses[68] = dataValues[4];
                 newResponses[75] = dataValues[5];
                 newResponses[76] = dataValues[6];
-                newResponses[78] = dataValues[7];
+                newResponses[77] = dataValues[7];
                 break;
               case 50:
                 newResponses[60] = dataValues[0];
@@ -201,6 +203,7 @@ const MandalaChart = () => {
       console.error('Error occurred while fetching data:', error);
     } finally {
       setIsLoading(false);
+      setShowSaveButton(true);
     }
   };
 
@@ -230,6 +233,119 @@ const MandalaChart = () => {
     setEditedResponses(newEditedResponses);
   };
 
+  const handleSaveButton = async () => {
+    try {
+      const mandalaData: Record<string, string> = {
+        mandala_title: title,
+      };
+
+      const gridIndicesMap: Record<number, string> = {
+        10: 'mandala1_1',
+        0: 'mandala1_2',
+        1: 'mandala1_3',
+        2: 'mandala1_4',
+        9: 'mandala1_5',
+        11: 'mandala1_6',
+        18: 'mandala1_7',
+        19: 'mandala1_8',
+        20: 'mandala1_9',
+        13: 'mandala2_1',
+        3: 'mandala2_2',
+        4: 'mandala2_3',
+        5: 'mandala2_4',
+        12: 'mandala2_5',
+        14: 'mandala2_6',
+        21: 'mandala2_7',
+        22: 'mandala2_8',
+        23: 'mandala2_9',
+        16: 'mandala3_1',
+        6: 'mandala3_2',
+        7: 'mandala3_3',
+        8: 'mandala3_4',
+        15: 'mandala3_5',
+        17: 'mandala3_6',
+        24: 'mandala3_7',
+        25: 'mandala3_8',
+        26: 'mandala3_9',
+        37: 'mandala4_1',
+        27: 'mandala4_2',
+        28: 'mandala4_3',
+        29: 'mandala4_4',
+        36: 'mandala4_5',
+        38: 'mandala4_6',
+        45: 'mandala4_7',
+        46: 'mandala4_8',
+        47: 'mandala4_9',
+        40: 'mandala5_1',
+        30: 'mandala5_2',
+        31: 'mandala5_3',
+        32: 'mandala5_4',
+        39: 'mandala5_5',
+        41: 'mandala5_6',
+        48: 'mandala5_7',
+        49: 'mandala5_8',
+        50: 'mandala5_9',
+        43: 'mandala6_1',
+        33: 'mandala6_2',
+        34: 'mandala6_3',
+        35: 'mandala6_4',
+        42: 'mandala6_5',
+        44: 'mandala6_6',
+        51: 'mandala6_7',
+        52: 'mandala6_8',
+        53: 'mandala6_9',
+        64: 'mandala7_1',
+        54: 'mandala7_2',
+        55: 'mandala7_3',
+        56: 'mandala7_4',
+        63: 'mandala7_5',
+        65: 'mandala7_6',
+        72: 'mandala7_7',
+        73: 'mandala7_8',
+        74: 'mandala7_9',
+        67: 'mandala8_1',
+        57: 'mandala8_2',
+        58: 'mandala8_3',
+        59: 'mandala8_4',
+        66: 'mandala8_5',
+        68: 'mandala8_6',
+        75: 'mandala8_7',
+        76: 'mandala8_8',
+        77: 'mandala8_9',
+        70: 'mandala9_1',
+        60: 'mandala9_2',
+        61: 'mandala9_3',
+        62: 'mandala9_4',
+        69: 'mandala9_5',
+        71: 'mandala9_6',
+        78: 'mandala9_7',
+        79: 'mandala9_8',
+        80: 'mandala9_9',
+      };
+
+      for (const gridIndex in gridIndicesMap) {
+        mandalaData[gridIndicesMap[gridIndex]] = editedResponses[gridIndex];
+      }
+      console.log(mandalaData);
+      const response = await fetch('http://localhost:8000/mandala_core', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mandalaData),
+      });
+
+      if (response.ok) {
+        console.log('データが正常に保存されました。');
+      } else {
+        const errorData = await response.json();
+        console.error('エラーが発生しました:', errorData.message);
+      }
+    } catch (error) {
+      console.error('データの保存中にエラーが発生しました:', error);
+    }
+  };
+
   return (
     <ChakraProvider>
       <Box display="grid" placeItems="center" height="100vh">
@@ -246,7 +362,8 @@ const MandalaChart = () => {
           width="30%"
           mt="2"
           mb="6"
-          readOnly={!isEditMode} // Disable editing of the chart title when not in edit mode
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
         <Box display="grid" gridTemplateColumns="repeat(9, 1fr)" gridGap="4px">
           {Array.from({ length: 81 }).map((_, index) => (
@@ -279,7 +396,6 @@ const MandalaChart = () => {
                   borderColor="transparent"
                   textAlign="center"
                   minHeight="unset"
-                  readOnly={!isEditMode} // Disable editing of the topic when not in edit mode
                 />
               ) : (
                 <Input
@@ -287,13 +403,12 @@ const MandalaChart = () => {
                   onChange={(e) => handleCellEdit(index, e.target.value)}
                   onKeyDown={(e) => {
                     if (isEditMode && e.keyCode === 8) {
-                      // Handle delete key (Backspace) to clear the input
                       handleCellEdit(index, '');
                     }
                   }}
                   textAlign="center"
                   minHeight="unset"
-                  readOnly={!isEditMode} // Disable editing of the responses when not in edit mode
+                  readOnly={!isEditMode}
                 />
               )}
             </Box>
@@ -309,7 +424,7 @@ const MandalaChart = () => {
             <Button
               flex="1"
               colorScheme="teal"
-              onClick={handleSaveButton}
+              onClick={handleMandalaButton}
               ml="2"
             >
               Let's Mandala
@@ -324,6 +439,17 @@ const MandalaChart = () => {
           >
             Start
           </Button>
+          {showSaveButton && (
+            <Button
+              flex="1"
+              colorScheme="teal"
+              onClick={handleSaveButton}
+              ml="2"
+              disabled={isLoading}
+            >
+              Save
+            </Button>
+          )}
         </Flex>
         {isLoading && (
           <Box
