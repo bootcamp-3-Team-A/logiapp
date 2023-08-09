@@ -16,12 +16,12 @@ router = APIRouter()
 llm = OpenAI(temperature=0.7)
 
 origins = [
-    "http://localhost:3000",  # Update this with your Next.js frontend URL
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # 特定のオリジンを許可する場合は origins に適切なオリジンを指定
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
