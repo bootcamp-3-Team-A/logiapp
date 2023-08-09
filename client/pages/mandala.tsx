@@ -6,12 +6,10 @@ import {
   Heading,
   Input,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 const MandalaChart = () => {
-  const [gridIndices, setGridIndices] = useState<number[]>([
-    10, 13, 16, 37, 43, 64, 67, 70,
-  ]);
   const [title, setTitle] = useState('');
   const [topic, setTopic] = useState('');
   const [responses, setResponses] = useState<string[]>(
@@ -26,6 +24,7 @@ const MandalaChart = () => {
       setEditedResponses([...responses]);
     }
   }, [isEditMode, responses]);
+  const router = useRouter();
 
   const handleStartButton = async () => {
     if (topic.trim() === '') {
@@ -326,7 +325,7 @@ const MandalaChart = () => {
       for (const gridIndex in gridIndicesMap) {
         mandalaData[gridIndicesMap[gridIndex]] = editedResponses[gridIndex];
       }
-      console.log(mandalaData);
+
       const response = await fetch('http://localhost:8000/mandala_core', {
         method: 'POST',
         headers: {
@@ -336,7 +335,8 @@ const MandalaChart = () => {
       });
 
       if (response.ok) {
-        console.log('データが正常に保存されました。');
+        console.log('データが正常に保存されました');
+        router.push('/logical_list');
       } else {
         const errorData = await response.json();
         console.error('エラーが発生しました:', errorData.message);
