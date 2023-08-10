@@ -1,15 +1,36 @@
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, Heading, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
+import { signIn, signOut, useSession } from "next-auth/react";
 import { Link as ScrollLink } from 'react-scroll';
 import TopButton from "../components/IconButton";
-// import Sideber from "../components/Sidebar"
+
 
 // スクロールをページの一番上に移動する関数
 const scrollToTop = () => {
   window.scroll({ top: 0, behavior: 'smooth' });
 };
 
+const LogoutButton = () => {
+
+  const handleLogout = async () => {
+    await signOut();
+    // ログアウト後の追加処理をここに記述
+  };
+
+  return (
+    <MenuItem onClick={handleLogout}>
+      Logout ログアウト
+    </MenuItem>
+  );
+};
+
+
 const TopPage = () => {
+
+  const { data: session } = useSession();
+
+
+
   return (
     <>
       {/* ハンバーガーメニュー */}
@@ -44,9 +65,7 @@ const TopPage = () => {
             <MenuItem>
               Login ログイン
             </MenuItem>
-            <MenuItem>
-              Logout ログアウト
-            </MenuItem>
+            <LogoutButton /> {/* Logout ログアウトが表示される */}
           </MenuList>
         </Menu>
       </Box>
@@ -71,12 +90,11 @@ const TopPage = () => {
         </Heading>
         <p>ロジカルシンキングをサポートし、作業効率をUPアップさせます</p>
         <Flex mt="20">
-          <Button colorScheme="customGray" mr="2" w="120px">
-            ログイン
-          </Button>
-          <Button colorScheme="customGray" w="120px">
-            サインアップ
-          </Button>
+          {!session && (
+            <Button onClick={() => signIn()} colorScheme="customGray" mr="2" w="120px">
+              サインイン
+            </Button>
+          )}
         </Flex>
       </Flex>
       {/* Aboutページ */}
