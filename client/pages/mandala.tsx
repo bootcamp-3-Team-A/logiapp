@@ -8,6 +8,9 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
+
+
+
 const MandalChart = () => {
   const [topic, setTopic] = useState('');
   const [responses, setResponses] = useState<string[]>(

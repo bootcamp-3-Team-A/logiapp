@@ -12,12 +12,18 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 
 app = FastAPI()
 router = APIRouter()
+app.include_router(router)
 
 llm = OpenAI(temperature=0.7)
 
 origins = [
-    "http://localhost:3000",  # Update this with your Next.js frontend URL
+    "http://localhost:3000",
+    "http://localhost:8000",# Update this with your Next.js frontend URL
+    "https://logi.mse-stage.com",
+    "https://logi.mse-stage.com:3000",
+    "https://logi.mse-stage.com:8000"
 ]
+
 
 app.add_middleware(
     CORSMiddleware,

@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from api.openai_api import router as chat_router
 from fastapi.middleware.cors import CORSMiddleware
 
+
 app = FastAPI()
 app.include_router(chat_router)
+
 
 origins = [
     "http://localhost:3000",  # Update this with your Next.js frontend URL
