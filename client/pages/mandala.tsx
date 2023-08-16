@@ -6,6 +6,7 @@ import {
   Heading,
   Input,
 } from '@chakra-ui/react';
+<<<<<<< HEAD
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -34,6 +35,18 @@ const MandalaChart = () => {
     try {
       setIsLoading(true);
 
+=======
+import { useState } from 'react';
+
+const MandalChart = () => {
+  const [topic, setTopic] = useState('');
+  const [responses, setResponses] = useState<string[]>(
+    Array.from({ length: 9 }, () => 'Data'),
+  );
+
+  const handleStartButton = async () => {
+    try {
+>>>>>>> 6685d4c (Initial commit)
       const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: {
@@ -47,6 +60,7 @@ const MandalaChart = () => {
         const responseData = JSON.parse(data.response) as Record<
           string,
           string
+<<<<<<< HEAD
         >;
         const dataValues = Object.values(responseData);
         setEditedResponses([...responses]);
@@ -65,12 +79,18 @@ const MandalaChart = () => {
         });
 
         setEditedResponses(dataValues);
+=======
+        >; // Parse the JSON response and specify the type
+        const dataValues = Object.values(responseData);
+        setResponses(dataValues);
+>>>>>>> 6685d4c (Initial commit)
       } else {
         const errorData = await response.json();
         console.error('Error occurred:', errorData.message);
       }
     } catch (error) {
       console.error('Error occurred while fetching data:', error);
+<<<<<<< HEAD
     } finally {
       setIsLoading(false);
       setIsEditMode(false);
@@ -343,11 +363,14 @@ const MandalaChart = () => {
       }
     } catch (error) {
       console.error('データの保存中にエラーが発生しました:', error);
+=======
+>>>>>>> 6685d4c (Initial commit)
     }
   };
 
   return (
     <ChakraProvider>
+<<<<<<< HEAD
       <Box display="grid" placeItems="center" height="100vh">
         <Heading as="h1" size="xl" mb="4">
           Mandala Chart
@@ -379,6 +402,22 @@ const MandalaChart = () => {
                   ? 'red.50'
                   : 'gray.200'
               }
+=======
+      <Flex
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="100vh"
+      >
+        <Heading as="h1" size="xl" mb="4">
+          Mandala Chart
+        </Heading>
+        <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gridGap="4px">
+          {Array.from({ length: 9 }).map((_, index) => (
+            <Box
+              key={index}
+              backgroundColor="gray.200"
+>>>>>>> 6685d4c (Initial commit)
               borderWidth="1px"
               borderColor="transparent"
               p="4"
@@ -388,7 +427,11 @@ const MandalaChart = () => {
               alignItems="center"
               justifyContent="center"
             >
+<<<<<<< HEAD
               {index === 40 ? (
+=======
+              {index === 4 ? (
+>>>>>>> 6685d4c (Initial commit)
                 <Input
                   placeholder="トピックを入力"
                   value={topic}
@@ -398,6 +441,7 @@ const MandalaChart = () => {
                   minHeight="unset"
                 />
               ) : (
+<<<<<<< HEAD
                 <Input
                   value={isEditMode ? editedResponses[index] : responses[index]}
                   onChange={(e) => handleCellEdit(index, e.target.value)}
@@ -410,10 +454,14 @@ const MandalaChart = () => {
                   minHeight="unset"
                   readOnly={!isEditMode}
                 />
+=======
+                responses[index]
+>>>>>>> 6685d4c (Initial commit)
               )}
             </Box>
           ))}
         </Box>
+<<<<<<< HEAD
         <Flex mt="4" w="20%">
           {!isLoading && !isEditMode && (
             <Button flex="1" colorScheme="teal" onClick={toggleEditMode}>
@@ -468,8 +516,18 @@ const MandalaChart = () => {
           </Box>
         )}
       </Box>
+=======
+        <Button mt="4" colorScheme="teal" onClick={handleStartButton}>
+          Start
+        </Button>
+      </Flex>
+>>>>>>> 6685d4c (Initial commit)
     </ChakraProvider>
   );
 };
 
+<<<<<<< HEAD
 export default MandalaChart;
+=======
+export default MandalChart;
+>>>>>>> 6685d4c (Initial commit)

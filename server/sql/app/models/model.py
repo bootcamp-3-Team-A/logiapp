@@ -99,8 +99,11 @@ class IdeaMandalaCore(Base):
     mandala9_8 = Column(String(255))
     mandala9_9 = Column(String(255))
 
+<<<<<<< HEAD
     mandala_title = Column(String(255))
 
+=======
+>>>>>>> 6685d4c (Initial commit)
 
 class Idea5w2hIdea(Base):
     __tablename__ = "idea_5w2h_idea_table"
