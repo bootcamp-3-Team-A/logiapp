@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { ChakraProvider } from "@chakra-ui/react";
 import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app'; // AppProps型をインポート
@@ -17,6 +18,13 @@ function MyApp({ Component, pageProps }: AppProps) { //分割代入 AppProps型�
       </SessionProvider>
     </ChakraProvider>
   );
+=======
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+>>>>>>> 6685d4c (Initial commit)
 }
 
 export default MyApp;
