@@ -4,6 +4,9 @@ import { useState } from 'react';
 const FiveW2HChart = () => {
     const questions = ["Who", "What", "When", "Where", "Why", "How", "How much"];
 
+    // かなり作りかけです。バンバン修正してやってください
+
+
     // 初期の入力内容を保存するためのstate
     const [inputs, setInputs] = useState(Array(7).fill(''));
 
