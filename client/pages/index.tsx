@@ -137,7 +137,7 @@ const TopPage = () => {
         </Flex>
 
         {/* Analysisページ */}
-        <Flex flexDirection="column" alignItems="center" justifyContent="center" width="100%">
+        <Flex flexDirection="column" alignItems="center" justifyContent="center" width="100%" height="100vh">
           <Heading as="h2" mb="5" style={{ fontSize: "4rem" }}>
             Analysis
           </Heading>
@@ -150,7 +150,7 @@ const TopPage = () => {
           <Image src="/images/What-2.png" alt="Idea Image" mt="20" maxW="800px" mb="80" />
         </Flex>
         {/* Analysisページ */}
-        <Flex flexDirection="column" alignItems="center" justifyContent="center" width="100%">
+        <Flex flexDirection="column" alignItems="center" justifyContent="center" width="100%" height="100vh">
           <Heading as="h2" mb="5" style={{ fontSize: "4rem" }}>
             Analysis
           </Heading>
@@ -164,22 +164,18 @@ const TopPage = () => {
         </Flex>
 
 
-        <Box
-          position="fixed"
-          top="10px"
-          left="10px"
-          backgroundImage="url('/images/background.png')"
-          backgroundSize="cover" // 画像をコンテナに合わせて調整
-          backgroundRepeat="no-repeat"
-          width="100vw"
-          height="100vh"
-          zIndex="-1" // 背景画像は他の要素よりも背面に表示
+        <Flex
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="center"
+          height="30%"
+          width="100%"
+          backgroundColor="blue.100"
         >
-        </Box >
-        <Flex flexDirection="row" alignItems="center" justifyContent="center" width="80%">
           <Image src="/images/Instagram.png" alt="Instagram Icon" maxW="20px" mr="10px" />
           <Image src="/images/Twitter.png" alt="Twitter Icon" maxW="20px" />
         </Flex>
+
 
       </Flex>
       <TopButton />
