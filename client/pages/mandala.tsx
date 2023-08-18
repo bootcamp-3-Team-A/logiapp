@@ -67,6 +67,7 @@ const MandalChart = () => {
 
         setResponses((prevResponses) => {
           const newResponses = [...prevResponses];
+          newResponses[40] = topic;
           newResponses[30] = dataValues[0];
           newResponses[31] = dataValues[1];
           newResponses[32] = dataValues[2];
@@ -344,6 +345,7 @@ const MandalChart = () => {
 
       for (const gridIndex in gridIndicesMap) {
         mandalaData[gridIndicesMap[gridIndex]] = editedResponses[gridIndex];
+        mandalaData[gridIndicesMap[40]] = editedResponses[40];
       }
 
       const response = await fetch('http://localhost:8000/mandala_core', {
