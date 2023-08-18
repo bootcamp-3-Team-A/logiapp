@@ -1,25 +1,40 @@
-import { Box, Button, ChakraProvider, Heading } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { MandalaData } from './mandala_types';
 
-const LogicalList = () => {
-  const router = useRouter();
+function MandalaListPage() {
+  const [mandalaDataList, setMandalaDataList] = useState<MandalaData[]>([]);
 
-  const handleBackButton = () => {
-    router.push('/mandala');
-  };
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('http://localhost:8000/mandala_list');
+
+        const data = await response.json();
+
+        setMandalaDataList(data);
+      } catch (error) {
+        console.error('Mandalaデータの取得中にエラーが発生しました:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
-    <ChakraProvider>
-      <Box display="grid" placeItems="center" height="100vh">
-        <Heading as="h2" size="md" mb="4">
-          保存しました！
-        </Heading>
-        <Button flex="1" colorScheme="teal" onClick={handleBackButton} ml="2">
-          戻る
-        </Button>
-      </Box>
-    </ChakraProvider>
+    <div>
+      <h1>Mandala一覧</h1>
+      <ul>
+        {mandalaDataList.map((mandalaData) => (
+          <li key={mandalaData.mandala_id}>
+            <Link href={`/${mandalaData.mandala_id}`}>
+              {mandalaData.mandala_title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
-};
+}
 
-export default LogicalList;
+export default MandalaListPage;
