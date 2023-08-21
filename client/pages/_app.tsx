@@ -1,4 +1,4 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider } from "@chakra-ui/react";
 import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app'; // AppProps型をインポート
 import theme from '../styles/theme';

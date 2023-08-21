@@ -1,19 +1,8 @@
 import { HamburgerIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  IconButton,
-  Image,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-} from '@chakra-ui/react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { Box, Button, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading, IconButton, Image, Menu, MenuButton, MenuItem, Text, useDisclosure } from '@chakra-ui/react';
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Link as ScrollLink } from 'react-scroll';
 import TopButton from '../components/IconButton';
 
@@ -23,51 +12,110 @@ const scrollToTop = () => {
 };
 
 const LogoutButton = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const handleLogout = async () => {
     await signOut();
-  };
-
-  return <MenuItem onClick={handleLogout}>Logout ログアウト</MenuItem>;
-};
-
-const TopPage = () => {
-  const { data: session } = useSession();
-
-  const handleGoBack = () => {
-    if (session) {
-      // ログイン状態であればトップページにリダイレクト
-      window.location.href = '/';
+    if (!session) {
+      router.push('/'); // ログアウト後にTop Pageに遷移
     }
   };
 
   return (
+    <MenuItem _focus={{ bg: 'black' }} onClick={handleLogout}>
+      Logout ログアウト
+    </MenuItem>
+  );
+};
+
+const TopPage = () => {
+  const { data: session } = useSession();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+
+
+  // メニューを開く関数
+  const openMenu = () => {
+    if (isOpen) {
+      onClose();
+    } else {
+      onOpen();
+    }
+  };
+
+  // メニューを閉じる関数
+  const closeMenu = () => {
+    onClose();
+  };
+
+
+
+  // メニューをトグルする関数
+  const toggleMenu = () => {
+    if (isOpen) {
+      onClose();
+    } else {
+      onOpen();
+    }
+  }
+
+
+  return (
     <>
-      {/* ハンバーガーメニュー */}
-      <Box position="fixed" top="10px" right="10px">
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label="Options"
-            icon={<HamburgerIcon />}
-            variant="unstyled"
-          />
-          <MenuList color="gray">
-            <MenuItem onClick={scrollToTop}>Top トップページ</MenuItem>
+      <Menu>
+        <MenuButton
+          as={IconButton}
+          aria-label="Options"
+          icon={<HamburgerIcon />}
+          variant="unstyled"
+          ml="auto"
+          position="fixed"
+          right="1rem"
+          onClick={openMenu}
+        />
+        <Drawer
+          isOpen={isOpen}
+          placement="right"
+          onClose={() => {
+            toggleMenu(); // メニューを閉じるときにもトグルする
+          }}
+          initialFocusRef={undefined}
+        >
+          <DrawerOverlay />
+          <DrawerContent bg="gray" color="white" >
+            <DrawerCloseButton />
+            <DrawerHeader>Welcome to LOGI</DrawerHeader>
+
+
+            <MenuItem _focus={{ bg: 'black' }} onClick={() => {
+              closeMenu();
+              scrollToTop(); // メニュー項目をクリックした際もスクロールをトップに戻す
+            }}>
+              Top トップページ
+            </MenuItem>
             <ScrollLink
-              to="about" // スクロール先の要素のIDを指定
+              to="about"
               spy={true}
               smooth={true}
-              duration={500} //スクロールアニメーションの実行500ミリ秒
+              duration={500}
             >
-              <MenuItem>About アプリについて</MenuItem>
+              <MenuItem _focus={{ bg: 'black' }}>
+                About アプリについて
+              </MenuItem>
             </ScrollLink>
-            <MenuItem>Open File...</MenuItem>
-            <MenuItem>SignUp 新規登録</MenuItem>
-            <MenuItem>Login ログイン</MenuItem>
+            <MenuItem _focus={{ bg: 'black' }}>
+              Open File...
+            </MenuItem>
+            <MenuItem _focus={{ bg: 'black' }}>
+              Login ログイン
+            </MenuItem>
             {session && <LogoutButton />}
-          </MenuList>
-        </Menu>
-      </Box>
+
+          </DrawerContent>
+        </Drawer>
+      </Menu>
+
 
       <Box
         position="fixed"
@@ -127,15 +175,10 @@ const TopPage = () => {
         <Heading as="h1" mt="15" ml="5" mb="20">
           About us...
         </Heading>
-        <Text ml="5" mb="80" width="70%" style={{ fontSize: '1.2rem' }}>
-          LOGIは、タスクを効率的に進めることをサポートするサービスです。
-          <br />
-          状況に応じてさまざまなロジカルシンキングのフレームワークを選択することができます。
-          <br />
-          それにより、異なる問題に対して最適なアプローチを見つけます。
-          <br />
-          複雑な問題を整理し、解決策を見つける際に、よりスムーズかつ効果的なプロセスを経ることができるでしょう。
-          <br />
+        <Text ml="5" mb="80" width="70%" style={{ fontSize: "1.2rem", textAlign: "center" }}>
+          LOGIは,タスクを効率的に進め,解決策を見つけるサポートをするサービスです。<br />
+          状況に応じてさまざまなロジカルシンキングのフレームワークを選択することができ,<br />
+          複雑な問題に対して、スムーズかつ最適なプロセスを提供します。<br />
         </Text>
 
         <Flex
@@ -163,14 +206,8 @@ const TopPage = () => {
         </Flex>
 
         {/* Analysisページ */}
-        <Flex
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          width="100%"
-          height="100vh"
-        >
-          <Heading as="h2" mb="5" style={{ fontSize: '4rem' }}>
+        <Flex flexDirection="column" alignItems="center" justifyContent="center" width="100%" py="50px">
+          <Heading as="h2" mb="5" style={{ fontSize: "4rem" }}>
             Analysis
           </Heading>
           <Heading as="h2" mb="5" style={{ fontSize: '2rem' }}>
@@ -179,23 +216,11 @@ const TopPage = () => {
           <Text>
             状況や事実を「5W2H」の問いかけに答えることで、整理し視覚化することで、新しい視点から問題を分析できます。
           </Text>
-          <Image
-            src="/images/What-2.png"
-            alt="Idea Image"
-            mt="20"
-            maxW="800px"
-            mb="80"
-          />
+          <Image src="/images/What-2.png" alt="Idea Image" mt="20" maxW="800px" mb="100" />
         </Flex>
         {/* Analysisページ */}
-        <Flex
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          width="100%"
-          height="100vh"
-        >
-          <Heading as="h2" mb="5" style={{ fontSize: '4rem' }}>
+        <Flex flexDirection="column" alignItems="center" justifyContent="center" width="100%" py="50px">
+          <Heading as="h2" mb="5" style={{ fontSize: "4rem" }}>
             Analysis
           </Heading>
           <Heading as="h2" mb="5" style={{ fontSize: '2rem' }}>
@@ -204,31 +229,22 @@ const TopPage = () => {
           <Text>
             情報を整理し視覚的に理解しやすくすることで、特定のトピックや問題を解決します。
           </Text>
-          <Image
-            src="/images/logicTree.png"
-            alt="Idea Image"
-            mt="20"
-            maxW="600px"
-            mb="20"
-          />
+          <Image src="/images/logicTree.png" alt="Idea Image" mt="50" maxW="600px" mb="20" />
         </Flex>
 
-        <Flex
-          flexDirection="row"
+        <Text>FULLOW US</Text>
+        <Box
+          display="flex"
           alignItems="center"
           justifyContent="center"
-          height="30%"
           width="100%"
-          backgroundColor="blue.100"
         >
-          <Image
-            src="/images/Instagram.png"
-            alt="Instagram Icon"
-            maxW="20px"
-            mr="10px"
-          />
-          <Image src="/images/Twitter.png" alt="Twitter Icon" maxW="20px" />
-        </Flex>
+          <Image src="/images/Instagram.png" mt="10" mb="100" alt="Instagram Icon" maxW="20px" mr="10px" />
+          <Image src="/images/Twitter.png" mt="10" mb="100" alt="Twitter Icon" maxW="20px" />
+        </Box>
+
+        <Text>Team LOGI 2023</Text>
+
       </Flex>
       <TopButton />
     </>

@@ -1,10 +1,8 @@
 import {
   Box,
-  Button,
-  ChakraProvider,
-  Flex,
+  Button, Flex,
   Heading,
-  Input,
+  Input
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -13,7 +11,7 @@ const MandalaChart = () => {
   const [title, setTitle] = useState('');
   const [topic, setTopic] = useState('');
   const [responses, setResponses] = useState<string[]>(
-    Array.from({ length: 81 }, () => 'Data'),
+    Array.from({ length: 81 }, () => ''),
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -349,43 +347,52 @@ const MandalaChart = () => {
   };
 
   return (
-    <ChakraProvider>
+
+    <Box
+      backgroundImage="url('/images/mandala.png')" // 画像のパスを指定
+      backgroundSize="cover" // 画像のサイズを調整
+      backgroundPosition="center" // 画像の位置を調整
+      width="100%" // ボックスの幅
+      height="100vh" // ボックスの高さ
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Box display="grid" placeItems="center" height="100vh">
-        <Heading as="h1" size="xl" mb="4">
+        <Heading as="h1" size="3xl" mb="1" color={'gray.600'}>
           Mandala Chart
         </Heading>
         <Input
-          placeholder="Mandala Chartのタイトルを入力"
-          borderColor="teal.500"
+          placeholder="タイトルを入力"
+          borderColor="gray.500"
           textAlign="center"
-          fontSize="xl"
-          p="4"
+          p="2"
           borderRadius="md"
           width="30%"
           mt="2"
-          mb="6"
+          mb="3"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <Box display="grid" gridTemplateColumns="repeat(9, 1fr)" gridGap="4px">
+        <Box display="grid" gridTemplateColumns="repeat(9, 1fr)">
           {Array.from({ length: 81 }).map((_, index) => (
             <Box
               key={index}
               backgroundColor={
                 index === 40
-                  ? 'red.200'
+                  ? 'gray.200'
                   : [
                     10, 13, 16, 30, 31, 32, 37, 39, 41, 43, 48, 49, 50, 64,
                     67, 70,
                   ].includes(index)
                     ? 'red.50'
-                    : 'gray.200'
+                    : 'transparent'
               }
               borderWidth="1px"
-              borderColor="transparent"
-              p="4"
+              borderColor="gray.300"
+              p="1.5"
               textAlign="center"
-              minHeight="100px"
+              // minHeight="100px"
               display="flex"
               alignItems="center"
               justifyContent="center"
@@ -393,6 +400,7 @@ const MandalaChart = () => {
               {index === 40 ? (
                 <Input
                   placeholder="トピックを入力"
+                  size="xl"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   borderColor="transparent"
@@ -408,6 +416,7 @@ const MandalaChart = () => {
                       handleCellEdit(index, '');
                     }
                   }}
+                  borderColor="transparent"
                   textAlign="center"
                   minHeight="unset"
                   readOnly={!isEditMode}
@@ -418,14 +427,14 @@ const MandalaChart = () => {
         </Box>
         <Flex mt="4" w="20%">
           {!isLoading && !isEditMode && (
-            <Button flex="1" colorScheme="teal" onClick={toggleEditMode}>
+            <Button flex="1" style={{ backgroundColor: "#553C9A", color: 'white' }} onClick={toggleEditMode}>
               Edit
             </Button>
           )}
           {isEditMode && (
             <Button
               flex="1"
-              colorScheme="teal"
+              style={{ backgroundColor: "#4f4f4f", color: 'white' }}
               onClick={handleMandalaButton}
               ml="2"
             >
@@ -434,7 +443,7 @@ const MandalaChart = () => {
           )}
           <Button
             flex="1"
-            colorScheme="teal"
+            style={{ backgroundColor: "#2C5282", color: 'white' }}
             onClick={handleStartButton}
             ml="2"
             disabled={isLoading}
@@ -444,7 +453,7 @@ const MandalaChart = () => {
           {showSaveButton && (
             <Button
               flex="1"
-              colorScheme="teal"
+              style={{ backgroundColor: "#4f4f4f", color: 'white' }}
               onClick={handleSaveButton}
               ml="2"
               disabled={isLoading}
@@ -470,7 +479,8 @@ const MandalaChart = () => {
           </Box>
         )}
       </Box>
-    </ChakraProvider>
+    </Box>
+
   );
 };
 

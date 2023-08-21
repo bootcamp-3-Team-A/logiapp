@@ -17,5 +17,8 @@
   },
   "python.analysis.extraPaths": [
     "./server/sql"
+  ],
+  "cSpell.words": [
+    "Chakra"
   ]
 }
