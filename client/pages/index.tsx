@@ -4,8 +4,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Link as ScrollLink } from 'react-scroll';
-import TopButton from "../components/IconButton";
-
+import TopButton from '../components/IconButton';
 
 // スクロールをページの一番上に移動する関数
 const scrollToTop = () => {
@@ -29,7 +28,6 @@ const LogoutButton = () => {
     </MenuItem>
   );
 };
-
 
 const TopPage = () => {
   const { data: session } = useSession();
@@ -129,18 +127,32 @@ const TopPage = () => {
         width="100vw"
         height="100vh"
         zIndex="-1" // 背景画像は他の要素よりも背面に表示
-      >
-      </Box>
+      ></Box>
 
       {/* トップページ */}
-      <Flex flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
-        <Heading colorScheme="customGray" as="h1" mb="5" style={{ fontSize: "6rem" }} >
+      <Flex
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="100vh"
+      >
+        <Heading
+          colorScheme="customGray"
+          as="h1"
+          mb="5"
+          style={{ fontSize: '6rem' }}
+        >
           LOGI
         </Heading>
         <p>ロジカルシンキングをサポートし、作業効率をUPアップさせます</p>
         <Flex mt="20">
           {!session ? (
-            <Button onClick={() => signIn()} colorScheme="customGray" mr="2" w="120px">
+            <Button
+              onClick={() => signIn()}
+              colorScheme="customGray"
+              mr="2"
+              w="120px"
+            >
               サインイン
             </Button>
           ) : (
@@ -153,8 +165,14 @@ const TopPage = () => {
         </Flex>
       </Flex>
       {/* Aboutページ */}
-      <Flex flexDirection="column" alignItems="center" justifyContent="flex-start" height="100vh" id="about">
-        <Heading as="h1" mt="15" ml="5" mb="20" >
+      <Flex
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="flex-start"
+        height="100vh"
+        id="about"
+      >
+        <Heading as="h1" mt="15" ml="5" mb="20">
           About us...
         </Heading>
         <Text ml="5" mb="80" width="70%" style={{ fontSize: "1.2rem", textAlign: "center" }}>
@@ -163,18 +181,28 @@ const TopPage = () => {
           複雑な問題に対して、スムーズかつ最適なプロセスを提供します。<br />
         </Text>
 
-        <Flex flexDirection="column" alignItems="center" justifyContent="center" width="100%">
-          <Heading as="h2" mb="5" style={{ fontSize: "4rem" }}>
+        <Flex
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          width="100%"
+        >
+          <Heading as="h2" mb="5" style={{ fontSize: '4rem' }}>
             Idea
           </Heading>
-          <Heading as="h2" mb="5" style={{ fontSize: "2rem" }}>
+          <Heading as="h2" mb="5" style={{ fontSize: '2rem' }}>
             マンダラチャート
           </Heading>
           <Text>
             マンダラチャートを使用し、一つのトピックに対して自動で関連するアイデアを出してくれます。
           </Text>
-          <Image src="/images/mandala-chart.jpg" alt="Idea Image" mt="20" maxW="400px" mb="80" />
-
+          <Image
+            src="/images/mandala-chart.jpg"
+            alt="Idea Image"
+            mt="20"
+            maxW="400px"
+            mb="80"
+          />
         </Flex>
 
         {/* Analysisページ */}
@@ -182,7 +210,7 @@ const TopPage = () => {
           <Heading as="h2" mb="5" style={{ fontSize: "4rem" }}>
             Analysis
           </Heading>
-          <Heading as="h2" mb="5" style={{ fontSize: "2rem" }}>
+          <Heading as="h2" mb="5" style={{ fontSize: '2rem' }}>
             5W2H
           </Heading>
           <Text>
@@ -195,7 +223,7 @@ const TopPage = () => {
           <Heading as="h2" mb="5" style={{ fontSize: "4rem" }}>
             Analysis
           </Heading>
-          <Heading as="h2" mb="5" style={{ fontSize: "2rem" }}>
+          <Heading as="h2" mb="5" style={{ fontSize: '2rem' }}>
             ロジックツリー
           </Heading>
           <Text>
