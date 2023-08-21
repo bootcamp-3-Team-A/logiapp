@@ -1,3 +1,5 @@
+import { ChevronRightIcon } from '@chakra-ui/icons';
+import { Box, Heading, List, ListItem } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Idea5w2hData } from './idea_5w2h_types';
@@ -31,31 +33,65 @@ function MandalaListPage() {
     fetchMandalaData();
     fetchIdea5w2hData();
   }, []);
-
   return (
-    <div>
-      <h1>Mandala一覧</h1>
-      <ul>
-        {mandalaDataList.map((mandalaData) => (
-          <li key={mandalaData.mandala_id}>
-            <Link href={`/mandala/${mandalaData.mandala_id}`}>
-              {mandalaData.mandala_title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <br />
-      <h1>5w2h一覧</h1>
-      <ul>
-        {idea5w2hDataList.map((idea5w2hData) => (
-          <li key={idea5w2hData.idea_5w2h_id}>
-            <Link href={`idea_5w2h/${idea5w2hData.idea_5w2h_id}`}>
-              {idea5w2hData.idea_5w2h_title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box
+      backgroundImage="url('/images/mandala.png')" // 画像のパスを指定
+      backgroundSize="cover" // 画像のサイズを調整
+      backgroundPosition="center" // 画像の位置を調整
+      width="100%" // ボックスの幅
+      height="100vh" // ボックスの高さ
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Box
+        p={8}
+        borderRadius="lg"
+        boxShadow="lg"
+        textAlign="center"
+        mr={20} // ボックス間の横のマージン
+      >
+        <Heading as="h1" size="3xl" color="gray.600" >
+          Mandala List
+        </Heading>
+
+
+        <List>
+          {mandalaDataList.map((mandalaData) => (
+            <ListItem key={mandalaData.mandala_id} mb={2}>
+              <Link href={`/mandala/${mandalaData.mandala_id}`}>
+                {mandalaData.mandala_title}
+                <ChevronRightIcon ml={1} />
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
+      <Box
+        p={8}
+        borderRadius="lg"
+        boxShadow="lg"
+        textAlign="center"
+        ml={6} // ボックス間の横のマージン
+      >
+        <Heading as="h1" size="3xl" color="gray.600" >
+          5w2h List
+        </Heading>
+
+        <List>
+          {idea5w2hDataList.map((idea5w2hData) => (
+            <ListItem key={idea5w2hData.idea_5w2h_id} mb={2}>
+              <Link href={`idea_5w2h/${idea5w2hData.idea_5w2h_id}`} color="blue.500">
+                {idea5w2hData.idea_5w2h_title}
+                <ChevronRightIcon ml={1} />
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    </Box>
+
   );
 }
 
