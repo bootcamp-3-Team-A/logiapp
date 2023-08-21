@@ -375,11 +375,11 @@ const MandalaChart = () => {
                 index === 40
                   ? 'red.200'
                   : [
-                      10, 13, 16, 30, 31, 32, 37, 39, 41, 43, 48, 49, 50, 64,
-                      67, 70,
-                    ].includes(index)
-                  ? 'red.50'
-                  : 'gray.200'
+                    10, 13, 16, 30, 31, 32, 37, 39, 41, 43, 48, 49, 50, 64,
+                    67, 70,
+                  ].includes(index)
+                    ? 'red.50'
+                    : 'gray.200'
               }
               borderWidth="1px"
               borderColor="transparent"

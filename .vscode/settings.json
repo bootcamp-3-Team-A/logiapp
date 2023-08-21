@@ -4,17 +4,18 @@
   "python.linting.flake8Enabled": true,
   "python.linting.lintOnSave": true,
   "python.formatting.provider": "none",
-  "python.formatting.blackArgs": ["--line-length", "119"],
+  "python.formatting.blackArgs": [
+    "--line-length",
+    "119"
+  ],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
-<<<<<<< HEAD
   },
-  "python.analysis.extraPaths": ["./server/sql"]
-=======
-  }
->>>>>>> 6685d4c (Initial commit)
+  "python.analysis.extraPaths": [
+    "./server/sql"
+  ]
 }
