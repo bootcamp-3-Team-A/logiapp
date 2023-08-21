@@ -11,7 +11,7 @@ const StartPage = () => {
         router.push('/mandala');
     };
     const handle5W2HReturn = () => {
-        router.push('/5w2h'); // ５W2Hページへ遷移
+        router.push('/idea_5w2h'); // ５W2Hページへ遷移
     };
 
     if (status === "loading") {
@@ -34,7 +34,7 @@ const StartPage = () => {
             </Box>
             <Flex flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
                 <Heading colorScheme="customGray" as="h1" mb="5" fontSize="4rem">
-                    <Text >Welcome to LOGI</Text>
+                    <Text color={'gray.600'} >Welcome to LOGI</Text>
                 </Heading>
 
                 <Flex flexDirection="row"> {/* マンダラボタンと５W２Hボタンを並列に */}

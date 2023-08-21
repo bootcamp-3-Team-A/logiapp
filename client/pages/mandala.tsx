@@ -1,12 +1,9 @@
 import {
   Box,
-  Button,
-  ChakraProvider,
-  Flex,
+  Button, Flex,
   Heading,
-  Input,
+  Input
 } from '@chakra-ui/react';
-<<<<<<< HEAD
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -14,7 +11,7 @@ const MandalaChart = () => {
   const [title, setTitle] = useState('');
   const [topic, setTopic] = useState('');
   const [responses, setResponses] = useState<string[]>(
-    Array.from({ length: 81 }, () => 'Data'),
+    Array.from({ length: 81 }, () => ''),
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -35,18 +32,6 @@ const MandalaChart = () => {
     try {
       setIsLoading(true);
 
-=======
-import { useState } from 'react';
-
-const MandalChart = () => {
-  const [topic, setTopic] = useState('');
-  const [responses, setResponses] = useState<string[]>(
-    Array.from({ length: 9 }, () => 'Data'),
-  );
-
-  const handleStartButton = async () => {
-    try {
->>>>>>> 6685d4c (Initial commit)
       const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: {
@@ -60,7 +45,6 @@ const MandalChart = () => {
         const responseData = JSON.parse(data.response) as Record<
           string,
           string
-<<<<<<< HEAD
         >;
         const dataValues = Object.values(responseData);
         setEditedResponses([...responses]);
@@ -79,18 +63,12 @@ const MandalChart = () => {
         });
 
         setEditedResponses(dataValues);
-=======
-        >; // Parse the JSON response and specify the type
-        const dataValues = Object.values(responseData);
-        setResponses(dataValues);
->>>>>>> 6685d4c (Initial commit)
       } else {
         const errorData = await response.json();
         console.error('Error occurred:', errorData.message);
       }
     } catch (error) {
       console.error('Error occurred while fetching data:', error);
-<<<<<<< HEAD
     } finally {
       setIsLoading(false);
       setIsEditMode(false);
@@ -363,77 +341,64 @@ const MandalChart = () => {
       }
     } catch (error) {
       console.error('データの保存中にエラーが発生しました:', error);
-=======
->>>>>>> 6685d4c (Initial commit)
     }
   };
 
   return (
-    <ChakraProvider>
-<<<<<<< HEAD
+
+    <Box
+      backgroundImage="url('/images/mandala.png')" // 画像のパスを指定
+      backgroundSize="cover" // 画像のサイズを調整
+      backgroundPosition="center" // 画像の位置を調整
+      width="100%" // ボックスの幅
+      height="100vh" // ボックスの高さ
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Box display="grid" placeItems="center" height="100vh">
-        <Heading as="h1" size="xl" mb="4">
+        <Heading as="h1" size="3xl" mb="1" color={'gray.600'}>
           Mandala Chart
         </Heading>
         <Input
-          placeholder="Mandala Chartのタイトルを入力"
-          borderColor="teal.500"
+          placeholder="タイトルを入力"
+          borderColor="gray.500"
           textAlign="center"
-          fontSize="xl"
-          p="4"
+          p="2"
           borderRadius="md"
           width="30%"
           mt="2"
-          mb="6"
+          mb="3"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <Box display="grid" gridTemplateColumns="repeat(9, 1fr)" gridGap="4px">
+        <Box display="grid" gridTemplateColumns="repeat(9, 1fr)">
           {Array.from({ length: 81 }).map((_, index) => (
             <Box
               key={index}
               backgroundColor={
                 index === 40
-                  ? 'red.200'
+                  ? 'gray.200'
                   : [
-                      10, 13, 16, 30, 31, 32, 37, 39, 41, 43, 48, 49, 50, 64,
-                      67, 70,
-                    ].includes(index)
-                  ? 'red.50'
-                  : 'gray.200'
+                    10, 13, 16, 30, 31, 32, 37, 39, 41, 43, 48, 49, 50, 64,
+                    67, 70,
+                  ].includes(index)
+                    ? 'red.50'
+                    : 'transparent'
               }
-=======
-      <Flex
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        height="100vh"
-      >
-        <Heading as="h1" size="xl" mb="4">
-          Mandala Chart
-        </Heading>
-        <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gridGap="4px">
-          {Array.from({ length: 9 }).map((_, index) => (
-            <Box
-              key={index}
-              backgroundColor="gray.200"
->>>>>>> 6685d4c (Initial commit)
               borderWidth="1px"
-              borderColor="transparent"
-              p="4"
+              borderColor="gray.300"
+              p="1.5"
               textAlign="center"
-              minHeight="100px"
+              // minHeight="100px"
               display="flex"
               alignItems="center"
               justifyContent="center"
             >
-<<<<<<< HEAD
               {index === 40 ? (
-=======
-              {index === 4 ? (
->>>>>>> 6685d4c (Initial commit)
                 <Input
                   placeholder="トピックを入力"
+                  size="xl"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   borderColor="transparent"
@@ -441,7 +406,6 @@ const MandalChart = () => {
                   minHeight="unset"
                 />
               ) : (
-<<<<<<< HEAD
                 <Input
                   value={isEditMode ? editedResponses[index] : responses[index]}
                   onChange={(e) => handleCellEdit(index, e.target.value)}
@@ -450,28 +414,25 @@ const MandalChart = () => {
                       handleCellEdit(index, '');
                     }
                   }}
+                  borderColor="transparent"
                   textAlign="center"
                   minHeight="unset"
                   readOnly={!isEditMode}
                 />
-=======
-                responses[index]
->>>>>>> 6685d4c (Initial commit)
               )}
             </Box>
           ))}
         </Box>
-<<<<<<< HEAD
         <Flex mt="4" w="20%">
           {!isLoading && !isEditMode && (
-            <Button flex="1" colorScheme="teal" onClick={toggleEditMode}>
+            <Button flex="1" style={{ backgroundColor: "#553C9A", color: 'white' }} onClick={toggleEditMode}>
               Edit
             </Button>
           )}
           {isEditMode && (
             <Button
               flex="1"
-              colorScheme="teal"
+              style={{ backgroundColor: "#4f4f4f", color: 'white' }}
               onClick={handleMandalaButton}
               ml="2"
             >
@@ -480,7 +441,7 @@ const MandalChart = () => {
           )}
           <Button
             flex="1"
-            colorScheme="teal"
+            style={{ backgroundColor: "#2C5282", color: 'white' }}
             onClick={handleStartButton}
             ml="2"
             disabled={isLoading}
@@ -490,7 +451,7 @@ const MandalChart = () => {
           {showSaveButton && (
             <Button
               flex="1"
-              colorScheme="teal"
+              style={{ backgroundColor: "#4f4f4f", color: 'white' }}
               onClick={handleSaveButton}
               ml="2"
               disabled={isLoading}
@@ -516,18 +477,9 @@ const MandalChart = () => {
           </Box>
         )}
       </Box>
-=======
-        <Button mt="4" colorScheme="teal" onClick={handleStartButton}>
-          Start
-        </Button>
-      </Flex>
->>>>>>> 6685d4c (Initial commit)
-    </ChakraProvider>
+    </Box>
+
   );
 };
 
-<<<<<<< HEAD
 export default MandalaChart;
-=======
-export default MandalChart;
->>>>>>> 6685d4c (Initial commit)
