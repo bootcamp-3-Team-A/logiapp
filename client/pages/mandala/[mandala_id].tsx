@@ -1,7 +1,7 @@
 import { Box, Button, Grid, GridItem, Input, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MandalaData } from './mandala_types';
+import { MandalaData } from '../mandala_types';
 
 function MandalaPage() {
   const router = useRouter();

@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier **/*.{ts,tsx} --write",
-    "fix": "npm run format && npm run lint",
-    "prepare": "husky install"
+    "fix": "npm run format && npm run lint"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
