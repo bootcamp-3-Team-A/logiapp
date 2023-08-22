@@ -1,9 +1,4 @@
-import {
-  Box,
-  Button, Flex,
-  Heading,
-  Input
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Input } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -23,6 +18,9 @@ const MandalaChart = () => {
     }
   }, [isEditMode, responses]);
   const router = useRouter();
+  useEffect(() => {
+    setTitle(topic);
+  }, [topic]);
 
   const handleStartButton = async () => {
     if (topic.trim() === '') {
@@ -233,6 +231,13 @@ const MandalaChart = () => {
 
   const handleSaveButton = async () => {
     try {
+      const finalizedResponses = [...editedResponses];
+      for (let i = 0; i < finalizedResponses.length; i++) {
+        if (finalizedResponses[i] === '') {
+          finalizedResponses[i] = responses[i];
+        }
+      }
+
       const mandalaData: Record<string, string> = {
         mandala_title: title,
       };
@@ -322,8 +327,7 @@ const MandalaChart = () => {
       };
 
       for (const gridIndex in gridIndicesMap) {
-        mandalaData[gridIndicesMap[gridIndex]] = editedResponses[gridIndex];
-        mandalaData[gridIndicesMap[40]] = editedResponses[40];
+        mandalaData[gridIndicesMap[gridIndex]] = finalizedResponses[gridIndex];
       }
 
       const response = await fetch('http://localhost:8000/mandala_core', {
@@ -347,7 +351,6 @@ const MandalaChart = () => {
   };
 
   return (
-
     <Box
       backgroundImage="url('/images/mandala.png')" // 画像のパスを指定
       backgroundSize="cover" // 画像のサイズを調整
@@ -382,11 +385,11 @@ const MandalaChart = () => {
                 index === 40
                   ? 'gray.200'
                   : [
-                    10, 13, 16, 30, 31, 32, 37, 39, 41, 43, 48, 49, 50, 64,
-                    67, 70,
-                  ].includes(index)
-                    ? 'red.50'
-                    : 'transparent'
+                      10, 13, 16, 30, 31, 32, 37, 39, 41, 43, 48, 49, 50, 64,
+                      67, 70,
+                    ].includes(index)
+                  ? 'red.50'
+                  : 'transparent'
               }
               borderWidth="1px"
               borderColor="gray.300"
@@ -427,33 +430,39 @@ const MandalaChart = () => {
         </Box>
         <Flex mt="4" w="20%">
           {!isLoading && !isEditMode && (
-            <Button flex="1" style={{ backgroundColor: "#553C9A", color: 'white' }} onClick={toggleEditMode}>
+            <Button
+              flex="1"
+              style={{ backgroundColor: '#553C9A', color: 'white' }}
+              onClick={toggleEditMode}
+            >
               Edit
             </Button>
           )}
           {isEditMode && (
             <Button
               flex="1"
-              style={{ backgroundColor: "#4f4f4f", color: 'white' }}
+              style={{ backgroundColor: '#4f4f4f', color: 'white' }}
               onClick={handleMandalaButton}
               ml="2"
             >
               Let's Mandala
             </Button>
           )}
-          <Button
-            flex="1"
-            style={{ backgroundColor: "#2C5282", color: 'white' }}
-            onClick={handleStartButton}
-            ml="2"
-            disabled={isLoading}
-          >
-            Start
-          </Button>
+          {!isLoading && (
+            <Button
+              flex="1"
+              style={{ backgroundColor: '#2C5282', color: 'white' }}
+              onClick={handleStartButton}
+              ml="2"
+              disabled={isLoading}
+            >
+              Start
+            </Button>
+          )}
           {showSaveButton && (
             <Button
               flex="1"
-              style={{ backgroundColor: "#4f4f4f", color: 'white' }}
+              style={{ backgroundColor: '#4f4f4f', color: 'white' }}
               onClick={handleSaveButton}
               ml="2"
               disabled={isLoading}
@@ -480,7 +489,6 @@ const MandalaChart = () => {
         )}
       </Box>
     </Box>
-
   );
 };
 
