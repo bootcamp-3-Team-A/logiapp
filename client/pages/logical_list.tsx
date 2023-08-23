@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Box, Heading, List, ListItem } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, List, ListItem } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Idea5w2hData } from './idea_5w2h_types';
@@ -33,6 +33,7 @@ function MandalaListPage() {
     fetchMandalaData();
     fetchIdea5w2hData();
   }, []);
+
   return (
     <Box
       backgroundImage="url('/images/mandala.png')" // 画像のパスを指定
@@ -43,55 +44,62 @@ function MandalaListPage() {
       display="flex"
       alignItems="center"
       justifyContent="center"
+      flexDirection="column"
     >
-      <Box
-        p={8}
-        borderRadius="lg"
-        boxShadow="lg"
-        textAlign="center"
-        mr={20} // ボックス間の横のマージン
-      >
-        <Heading as="h1" size="3xl" color="gray.600" >
-          Mandala List
-        </Heading>
+      <Flex>
+        <Box
+          p={8}
+          borderRadius="lg"
+          boxShadow="lg"
+          textAlign="center"
+          mr={20} // ボックス間の横のマージン
+        >
+          <Heading as="h1" size="3xl" color="gray.600">
+            Mandala List
+          </Heading>
+          <List>
+            {mandalaDataList.map((mandalaData) => (
+              <ListItem key={mandalaData.mandala_id} mb={2}>
+                <Link href={`/mandala/${mandalaData.mandala_id}`}>
+                  {mandalaData.mandala_title}
+                  <ChevronRightIcon ml={1} />
+                </Link>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
 
-
-        <List>
-          {mandalaDataList.map((mandalaData) => (
-            <ListItem key={mandalaData.mandala_id} mb={2}>
-              <Link href={`/mandala/${mandalaData.mandala_id}`}>
-                {mandalaData.mandala_title}
-                <ChevronRightIcon ml={1} />
-              </Link>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-
-      <Box
-        p={8}
-        borderRadius="lg"
-        boxShadow="lg"
-        textAlign="center"
-        ml={6} // ボックス間の横のマージン
-      >
-        <Heading as="h1" size="3xl" color="gray.600" >
-          5w2h List
-        </Heading>
-
-        <List>
-          {idea5w2hDataList.map((idea5w2hData) => (
-            <ListItem key={idea5w2hData.idea_5w2h_id} mb={2}>
-              <Link href={`idea_5w2h/${idea5w2hData.idea_5w2h_id}`} color="blue.500">
-                {idea5w2hData.idea_5w2h_title}
-                <ChevronRightIcon ml={1} />
-              </Link>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+        <Box
+          p={8}
+          borderRadius="lg"
+          boxShadow="lg"
+          textAlign="center"
+          ml={6} // ボックス間の横のマージン
+        >
+          <Heading as="h1" size="3xl" color="gray.600">
+            5w2h List
+          </Heading>
+          <List>
+            {idea5w2hDataList.map((idea5w2hData) => (
+              <ListItem key={idea5w2hData.idea_5w2h_id} mb={2}>
+                <Link
+                  href={`idea_5w2h/${idea5w2hData.idea_5w2h_id}`}
+                  color="blue.500"
+                >
+                  {idea5w2hData.idea_5w2h_title}
+                  <ChevronRightIcon ml={1} />
+                </Link>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Flex>
+      <Link href="/start">
+        <Button colorScheme="blue" w="120px" ml="16" mt={10}>
+          戻る
+        </Button>
+      </Link>
     </Box>
-
   );
 }
 
