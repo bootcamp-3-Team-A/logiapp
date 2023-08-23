@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Input } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Input, Link } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -428,7 +428,7 @@ const MandalaChart = () => {
             </Box>
           ))}
         </Box>
-        <Flex mt="4" w="20%">
+        <Flex mt="4" w="23%">
           {!isLoading && !isEditMode && (
             <Button
               flex="1"
@@ -470,6 +470,11 @@ const MandalaChart = () => {
               Save
             </Button>
           )}
+          <Link href="/start">
+            <Button colorScheme="blue" ml="2" flex="1" w="100px">
+              戻る
+            </Button>
+          </Link>
         </Flex>
         {isLoading && (
           <Box

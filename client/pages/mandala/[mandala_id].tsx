@@ -1,4 +1,13 @@
-import { Box, Button, Grid, GridItem, Input, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Input,
+  Text,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MandalaData } from '../mandala_types';
@@ -176,50 +185,116 @@ function MandalaPage() {
   };
 
   return (
-    <Box>
-      {saveMessageVisible && <Text color="green">保存しました</Text>}
-      <Text fontSize="xl">Mandalaデータ (ID: {mandalaData.mandala_id})</Text>
-      <Text>Mandalaタイトル: {mandalaData.mandala_title}</Text>
-      {!editable ? <Button onClick={handleEditToggle}>編集</Button> : null}
-      <Grid templateColumns="repeat(9, 1fr)" gap="4px" alignItems="center">
-        {Array.from({ length: 81 }).map((_, index) => {
-          const propName = gridMapping[index];
-          const cellData = propName ? mandalaData[propName] : '';
+    <Box
+      backgroundImage="url('/images/mandala.png')" // 画像のパスを指定
+      backgroundSize="cover" // 画像のサイズを調整
+      backgroundPosition="center" // 画像の位置を調整
+      minHeight="100vh" // 最小の高さを画面の高さに設定
+      display="flex"
+      flexDirection="column" // コンテンツを縦方向に配置
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Box>
+        {saveMessageVisible && <Text color="green">保存しました</Text>}
+        <Heading
+          as="h1"
+          size="3xl"
+          mb="10"
+          color={'gray.600'}
+          textAlign="center"
+        >
+          Mandala: {mandalaData.mandala_title}
+        </Heading>
+        <Grid
+          templateColumns="repeat(9, 1fr)"
+          gap="4px"
+          alignItems="center"
+          minHeight="unset"
+        >
+          {Array.from({ length: 81 }).map((_, index) => {
+            const propName = gridMapping[index];
+            const cellData = propName ? mandalaData[propName] : '';
 
-          let backgroundColor = 'gray';
+            let backgroundColor = 'transparent';
 
-          if (propName === 'mandala5_1') {
-            backgroundColor = 'blue';
-          }
+            if (propName === 'mandala5_1') {
+              backgroundColor = 'red.100';
+            }
 
-          return (
-            <GridItem
-              key={index}
-              bg={backgroundColor}
-              // Other styles
+            return (
+              <GridItem
+                key={index}
+                bg={backgroundColor}
+                borderWidth="1px"
+                borderColor="gray.300"
+                style={{
+                  width: '150px',
+                  height: '50px',
+                  display: 'flex',
+                  justifyContent: 'center', // 水平方向に中央揃え
+                  alignItems: 'center', // 垂直方向に中央揃え
+                }}
+              >
+                {editable ? (
+                  <Input
+                    type="text"
+                    value={cellData}
+                    width="100%"
+                    style={{
+                      width: '150px',
+                      height: '50px',
+                      display: 'flex',
+                      justifyContent: 'center', // 水平方向に中央揃え
+                      alignItems: 'center', // 垂直方向に中央揃え
+                    }}
+                    onChange={(event) => {
+                      const updatedMandalaData = {
+                        ...mandalaData,
+                        [propName]: event.target.value,
+                      };
+                      setMandalaData(updatedMandalaData);
+                    }}
+                  />
+                ) : (
+                  <div>{cellData}</div>
+                )}
+              </GridItem>
+            );
+          })}
+        </Grid>
+        <Flex justifyContent="center" mt="10" flexDirection="row">
+          <Button
+            colorScheme="customGray"
+            mr="2"
+            w="120px"
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>
+          <Button colorScheme="blue" mr="2" w="120px" onClick={handleBack}>
+            戻る
+          </Button>
+
+          {!editable ? (
+            <Button
+              w="120px"
+              style={{ backgroundColor: '#553C9A', color: 'white' }}
+              onClick={handleEditToggle}
             >
-              {editable ? (
-                <Input
-                  type="text"
-                  value={cellData}
-                  onChange={(event) => {
-                    const updatedMandalaData = {
-                      ...mandalaData,
-                      [propName]: event.target.value,
-                    };
-                    setMandalaData(updatedMandalaData);
-                  }}
-                />
-              ) : (
-                cellData
-              )}
-            </GridItem>
-          );
-        })}
-        <Button onClick={handleDelete}>Delete</Button>
-        <Button onClick={handleBack}>戻る</Button>
-      </Grid>
-      {editable ? <Button onClick={handleSave}>保存</Button> : null}
+              編集
+            </Button>
+          ) : (
+            <Button
+              w="120px"
+              style={{ backgroundColor: '#553C9A', color: 'white' }}
+              onClick={handleSave}
+            >
+              保存
+            </Button>
+          )}
+        </Flex>
+      </Box>
     </Box>
   );
 }
