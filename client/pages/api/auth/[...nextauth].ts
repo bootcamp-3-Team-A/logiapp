@@ -24,15 +24,15 @@ export default NextAuth({
 
     secret: process.env.NEXTAUTH_SECRET,
 
-    // callbacks: {
-    //     async signIn({ }) {
-    //         return true;
-    //     },
-    //     async redirect({ url, baseUrl }) {
-    //         return baseUrl + '/payment';
-    //     },
+    callbacks: {
+        async signIn({ }) {
+            return true;
+        },
+        async redirect({ url, baseUrl }) {
+            return baseUrl + '/payment';
+        },
 
-    // },
+    },
 
 
     // callbacks: {
@@ -60,17 +60,17 @@ export default NextAuth({
 
     // },
 
-    callbacks: {
-        async redirect({ url, baseUrl }) {
-            if (url === 'signOut') {
-                return "/";
-            }
-            if (url.startsWith(baseUrl)) {
-                return "/payment";
-            }
-            return baseUrl;
-        },
-    },
+    // callbacks: {
+    //     async redirect({ url, baseUrl }) {
+    //         if (url === 'signOut') {
+    //             return "/";
+    //         }
+    //         if (url.startsWith(baseUrl)) {
+    //             return "/payment";
+    //         }
+    //         return baseUrl;
+    //     },
+    // },
 
 
 

@@ -6,7 +6,7 @@ const PaymentPage = () => {
 
     useEffect(() => {
         // Stripeのリンクにリダイレクト
-        window.location.href = 'https://checkout.stripe.com/c/pay/cs_test_a1mjARxPV9CQxzMEkNH6SnMrVN659jAeBtbYFzINyHHBODk1uPpOith9NV#fidkdWxOYHwnPyd1blpxYHZxWjA0S2EwcVJNTGtQQkBzcnVOcTxMTDVnMTZJa3xLfWJLX002M3J0U3I1YGN0cW9iMVM9NGtBSkJ8SjJuNkszMzw1ajVHSUhKTGtybVxOT3dXNEswZENmPENJNTVcZDwxUDNrMCcpJ3VpbGtuQH11anZgYUxhJz8ncWB2cVo9ckg3PHQ3VUttNEBhcEAzanUneCUl';
+        window.location.href = 'https://buy.stripe.com/test_8wM29q2PNh1EduE6op';
     }, []);
 
     return (
